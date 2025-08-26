@@ -1,0 +1,22 @@
+Sub ExtractMail()
+    
+    Dim OutApp As New Outlook.Application
+    Dim OutNamespace As Namespace, OutFolder As Folder
+    Dim OutItem As Object, Outmail As MailItem
+    
+    Set OutNamespace = OutApp.GetNamespace("MAPI")
+    Set OutFolder = OutNamespace.GetDefaultFolder(olFolderInbox).Folders("FromSite")
+    
+    r = 1
+    For Each OutItem In OutFolder.Items
+        If TypeName(OutItem) = "MailItem" Then
+            Set Outmail = OutItem
+            r = r + 1
+            Range("A" & r).Value = Outmail.ReceivedTime
+            Range("B" & r).Value = Outmail.SenderEmailAddress
+            Range("C" & r).Value = Outmail.Subject
+            Range("D" & r).Value = Outmail.Body
+        End If
+    Next OutItem
+
+End Sub
